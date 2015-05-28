@@ -240,7 +240,8 @@ var sbBrowserOverlay = {
 
 	verifyTargetID : function(aTargetID)
 	{
-		if (aTargetID == "ScrapBookContextPicking") {
+		// TODO folder dialog for android
+		if (typeof window !== "undefined" && aTargetID == "ScrapBookContextPicking") {
 			var ret = {};
 			window.openDialog(
 				"chrome://scrapbook/content/folderPicker.xul", "",
@@ -262,7 +263,8 @@ var sbBrowserOverlay = {
 		}
 		aTargetID = this.verifyTargetID(aTargetID);
 		if ( !aTargetID ) return;
-		var targetWindow = aFrameOnly ? sbCommonUtils.getFocusedWindow() : window.content;
+		var content = typeof window !== "undefined" ? window.content : sbCommonUtils.getFocusedWindow().content;
+		var targetWindow = aFrameOnly ? sbCommonUtils.getFocusedWindow() : content;
 		var ret = sbContentSaver.captureWindow(targetWindow, aPartialEntire == 1, aShowDetail, aTargetID, 0, null);
 		return ret;
 	},
@@ -563,8 +565,8 @@ var sbMenuHandler = {
 
 
 
-
-window.addEventListener("load", function(){ sbBrowserOverlay.init(); }, false);
-window.addEventListener("unload", function(){ sbBrowserOverlay.destroy(); }, false);
-
+if (typeof window !== "undefined") {
+	window.addEventListener("load", function(){ sbBrowserOverlay.init(); }, false);
+	window.addEventListener("unload", function(){ sbBrowserOverlay.destroy(); }, false);
+}
 

@@ -1,4 +1,4 @@
-Components.utils.import("resource://scrapbook-modules/common.jsm");
+Components.utils.import("chrome://scrapbook-modules/content/common.jsm");
 
 var sbDataSource = {
 
@@ -476,6 +476,15 @@ var sbDataSource = {
 	outputTreeAutoDone : function()
 	{
 		this._needReOutputTree = false;
+	},
+
+	convertIdToURL : function(aId)
+	{
+		if (sbCommonUtils.isAndroid()) {
+			return sbCommonUtils.getBaseHref(this.data.URI) + "data/" + aId + "/index.html";
+		} else {
+			return "chrome://scrapbook/content/view.xul?id=" + aId;
+		}
 	}
 };
 

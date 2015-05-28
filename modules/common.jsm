@@ -107,6 +107,11 @@ var sbCommonUtils = {
 		return iVerComparator.compare(ver1, ver2);
 	},
 
+	isAndroid: function() {
+		return Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULRuntime)
+			.widgetToolkit.toLowerCase() == "android";
+	},
+
 	newItem : function(aID)
 	{
 		return { id : aID || "", create : aID || "", modify : aID || "", type : "", title : "", chars : "", icon : "", source : "", comment : "", lock : "" };
@@ -178,7 +183,7 @@ var sbCommonUtils = {
 	{
 		var win = this.WINDOW.getMostRecentWindow("navigator:browser");
 		if ( !win ) return;
-		var browser = win.gBrowser;
+		var browser = ("gBrowser" in win) ? win.gBrowser : win.BrowserApp;
 		if ( tabbed ) {
 			browser.selectedTab = browser.addTab(aURL);
 		} else {
@@ -198,6 +203,9 @@ var sbCommonUtils = {
 
 	_refresh: function(aDSChanged)
 	{
+		if (this.isAndroid()) {
+			return; // Maybe a good point to refresh home storage items
+		}
 		var cur = this.WINDOW.getMostRecentWindow(null);
 		var curDone = false;
 		var sidebarId = this.getSidebarId("sidebar");
@@ -543,6 +551,9 @@ var sbCommonUtils = {
 	getFocusedWindow : function()
 	{
 		var window = this.WINDOW.getMostRecentWindow("navigator:browser");
+		if (this.isAndroid()) {
+			return window;
+		}
 		var win = window.document.commandDispatcher.focusedWindow;
 		if ( !win || win == window || win instanceof Components.interfaces.nsIDOMChromeWindow ) win = window.content;
 		return win;
@@ -1027,7 +1038,7 @@ var sbCommonUtils = {
 			aObject1[i] = aObject2[i];
 		}
 		return aObject1;
-	},
+	}
 };
 
 /**

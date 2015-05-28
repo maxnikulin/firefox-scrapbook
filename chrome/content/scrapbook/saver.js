@@ -47,8 +47,11 @@ var sbContentSaver = {
 		this.item.chars  = aRootWindow.document.characterSet;
 		this.item.source = aRootWindow.location.href;
 		//Favicon der angezeigten Seite bestimmen (Unterscheidung zwischen FF2 und FF3 notwendig!)
-		if ( "gBrowser" in window && aRootWindow == gBrowser.contentWindow )
-		{
+		if (
+			typeof window !== "undefined" // TODO favicon for android
+			&& "gBrowser" in window
+			&& aRootWindow == gBrowser.contentWindow
+		) {
 			this.item.icon = gBrowser.mCurrentBrowser.mIconURL;
 		}
 		var titles = aRootWindow.document.title ? [aRootWindow.document.title] : [decodeURI(this.item.source)];
@@ -70,8 +73,12 @@ var sbContentSaver = {
 			this.selection = null;
 			this.item.title = titles[0];
 		}
-		if ( document.getElementById("ScrapBookToolbox") && !document.getElementById("ScrapBookToolbox").hidden )
-		{
+		// TODO user edited title and comment as function arguments
+		if (
+			typeof document !== "undefined"
+			&& document.getElementById("ScrapBookToolbox")
+			&& !document.getElementById("ScrapBookToolbox").hidden
+		) {
 			var modTitle = document.getElementById("ScrapBookEditTitle").value;
 			if ( titles.indexOf(modTitle) < 0 )
 			{
@@ -419,7 +426,9 @@ var sbContentSaver = {
 			this.item.icon = sbCommonUtils.escapeFileName(this.favicon);
 		}
 		sbCommonUtils.writeIndexDat(this.item);
-		if ( "sbBrowserOverlay" in window ) sbBrowserOverlay.updateFolderPref(aResName);
+		if ( typeof window !== "undefined" && "sbBrowserOverlay" in window ) {
+			sbBrowserOverlay.updateFolderPref(aResName);
+		}
 	},
 
 
@@ -1108,6 +1117,9 @@ var sbCaptureObserverCallback = {
 
 	trace : function(aText, aMillisec)
 	{
+		if (typeof top === "undefined") {
+			return; // android, no status bar
+		}
 		var status = top.window.document.getElementById("statusbar-display");
 		if ( !status ) return;
 		status.label = aText;
@@ -1153,7 +1165,7 @@ var sbCaptureObserverCallback = {
 				var listener = {
 					observe: function(subject, topic, data) {
 						if (topic == "alertclickcallback")
-							sbCommonUtils.loadURL("chrome://scrapbook/content/view.xul?id=" + data, true);
+							sbCommonUtils.loadURL(sbDataSource.convertIdToURL(data), true);
 					}
 				};
 				var alertsSvc = Components.classes["@mozilla.org/alerts-service;1"].getService(Components.interfaces.nsIAlertsService);
