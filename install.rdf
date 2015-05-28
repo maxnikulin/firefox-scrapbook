@@ -7,6 +7,7 @@
 		<em:id>scrapbookx@addons.mozilla.org</em:id>
 		<em:type>2</em:type>
 		<em:version>1.12.2</em:version>
+		<em:bootstrap>true</em:bootstrap>
 
 		<em:name>ScrapBook X</em:name>
 		<em:description>Helps you save web pages and organize the collection.</em:description>
@@ -256,11 +257,18 @@
 		</em:localized>
 
 		<em:iconURL>chrome://scrapbook/skin/main_32.png</em:iconURL>
-		<em:optionsURL>chrome://scrapbook/content/prefs.xul</em:optionsURL>
+		<!--	<em:optionsURL>chrome://scrapbook/content/prefs.xul</em:optionsURL> -->
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
 				<em:minVersion>3.0</em:minVersion>
+				<em:maxVersion>38.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+		<em:targetApplication>
+			<Description>
+				<em:id>{aa3c5121-dab2-40e2-81ca-7ea25febc110}</em:id>
+				<em:minVersion>34.0</em:minVersion>
 				<em:maxVersion>38.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
