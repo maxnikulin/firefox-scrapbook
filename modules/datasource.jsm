@@ -1,3 +1,4 @@
+// TODO "resource" for desktop, "content" for android in chrome.manifest
 Components.utils.import("chrome://scrapbook-modules/content/common.jsm");
 
 var sbDataSource = {
